@@ -402,9 +402,9 @@ Socket.prototype._destroy = function(exception, cb) {
   if (this._handle) {
     debug('close handle');
     this._isException = exception ? true : false;
-    if (this._handle.readyState !== 'closed') this._handle.close();
     this._handle.onmessage = noop;
     this._handle.onopen = noop;
+    if (this._handle.readyState !== 'closed') this._handle.close();
     this._handle = null;
   }
 
@@ -775,8 +775,7 @@ function afterConnect(self, handle) {
 
   // start the first read, or get an immediate EOF.
   // this doesn't actually consume any bytes, because len=0.
-  if (readable)
-    self.read(0);
+  self.read(0);
 }
 
 // SERVER

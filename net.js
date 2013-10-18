@@ -26,6 +26,9 @@ var stream = require('stream');
 var util = require('util');
 var assert = require('assert');
 var rawsocket = require('sawrocket');
+var Buffer = require('buffer').Buffer;
+var bufferToUint8 = require('uint8').bufferToUint8;
+
 
 var errnoException = util._errnoException;
 
@@ -140,6 +143,7 @@ function Socket(options) {
   initSocketHandle(this);
 
   this._pendingData = null;
+  this._pendingEncoding = '';
 
   // handle strings directly
   this._writableState.decodeStrings = false;
@@ -218,7 +222,12 @@ function onSocketEnd() {
 // Provide a better error message when we call end() as a result
 // of the other side sending a FIN.  The standard 'write after end'
 // is overly vague, and makes it seem like the user's code is to blame.
-function writeAfterFIN(chunk, cb) {
+function writeAfterFIN(chunk, encoding, cb) {
+  if (util.isFunction(encoding)) {
+    cb = encoding;
+    encoding = null;
+  }
+
   var er = new Error('This socket has been ended by the other party');
   er.code = 'EPIPE';
   var self = this;
@@ -329,8 +338,8 @@ Socket.prototype._read = function(n) {
 };
 
 
-Socket.prototype.end = function(data) {
-  stream.Duplex.prototype.end.call(this, data);
+Socket.prototype.end = function(data, encoding) {
+  stream.Duplex.prototype.end.call(this, data, encoding);
   this.writable = false;
 
   // just in case we're waiting for an EOF.
@@ -593,32 +602,40 @@ Socket.prototype.__defineGetter__('localPort', function() {
 });
 
 
-Socket.prototype.write = function(chunk, cb) {
+Socket.prototype.write = function(chunk, encoding, cb) {
   if (!util.isString(chunk) && !util.isBuffer(chunk))
     throw new TypeError('invalid data');
   return stream.Duplex.prototype.write.apply(this, arguments);
 };
 
 
-Socket.prototype._write = function(data, cb) {
+Socket.prototype._write = function(data, encoding, cb) {
   // If we are still connecting, then buffer this for later.
   // The Writable logic will buffer up any more writes while
   // waiting for this one to be done.
   if (this._connecting) {
     this._pendingData = data;
+    this._pendingEncoding = encoding;
     this.once('connect', function() {
-      this._write(data, cb);
+      this._write(data, encoding, cb);
     });
     return;
   }
   this._pendingData = null;
+  this._pendingEncoding = '';
 
   if (!this._handle) {
     this._destroy(new Error('This socket is closed.'), cb);
     return false;
   }
+    var enc;
+    if (util.isBuffer(data)) {
+      enc = 'buffer';
+    } else {
+      enc = encoding;
+    }
 
-  if (this._handle.send(data)) {
+  if (sendData(this._handle, data, enc)) {
     cb();
   } else {
     this._handle._afterWrites = this._handle._afterWrites || [];
@@ -626,21 +643,42 @@ Socket.prototype._write = function(data, cb) {
   }
 };
 
+function sendData(handle, data, encoding) {
+  switch (encoding) {
+    case 'buffer':break;
+    case 'hex':
+    case 'utf8':
+    case 'utf-8':
+    case 'ascii':
+    case 'binary':
+    case 'base64':
+    default:
+      data = new Buffer(data, encoding);
+  }
+  return handle.send(bufferToUint8(data).buffer);
+}
+
 
 Socket.prototype.__defineGetter__('bytesWritten', function() {
   var bytes = this._bytesDispatched,
       state = this._writableState,
-      data = this._pendingData;
+      data = this._pendingData,
+      encoding = this._pendingEncoding;
 
   state.buffer.forEach(function(el) {
-    bytes += el.chunk.length;
+    if (util.isBuffer(el.chunk))
+      bytes += el.chunk.length;
+    else
+      bytes += Buffer.byteLength(el.chunk, el.encoding);
   });
 
   if (data) {
-    bytes += data.length;
+    if (util.isBuffer(data))
+      bytes += data.length;
+    else
+      bytes += Buffer.byteLength(data, encoding);
   }
 
-  return bytes;
 });
 
 

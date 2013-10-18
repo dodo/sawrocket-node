@@ -19,6 +19,7 @@
     "net.js"
   ],
   "dependencies": {
-    "rawsocket": "*"
+    "rawsocket": "*",
+    "uint8": "*"
   }
 }

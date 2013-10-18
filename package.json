@@ -1,0 +1,24 @@
+{
+  "name": "sawrocket-node",
+  "version": "0.0.0",
+  "description": "net.js using Raw Socket API",
+  "author": "https://github.com/dodo",
+  "readmeFilename": "README.md",
+  "main": "net.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/dodo/sawrocket-node.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dodo/sawrocket-node/issues"
+  },
+  "keywords": [
+    "Raw",
+    "Socket",
+    "API",
+    "net.js"
+  ],
+  "dependencies": {
+    "rawsocket": "*"
+  }
+}

@@ -628,12 +628,12 @@ Socket.prototype._write = function(data, encoding, cb) {
     this._destroy(new Error('This socket is closed.'), cb);
     return false;
   }
-    var enc;
-    if (util.isBuffer(data)) {
-      enc = 'buffer';
-    } else {
-      enc = encoding;
-    }
+  var enc;
+  if (util.isBuffer(data)) {
+    enc = 'buffer';
+  } else {
+    enc = encoding;
+  }
 
   if (sendData(this._handle, data, enc)) {
     cb();
@@ -679,6 +679,7 @@ Socket.prototype.__defineGetter__('bytesWritten', function() {
       bytes += Buffer.byteLength(data, encoding);
   }
 
+  return bytes;
 });
 
 

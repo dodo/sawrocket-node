@@ -330,7 +330,6 @@ Socket.prototype._read = function(n) {
   } else if (!this._handle.reading) {
     // not already reading, start the flow
     debug('Socket._read resume');
-    this._handle.reading = true;
     this._handle.resume();
   }
 };
@@ -513,11 +512,8 @@ function onmessage(ev) {
     var ret = self.push(buffer);
 
     if (handle.reading && !ret) {
-      handle.reading = false;
       debug('suspend');
-      var err = handle.suspend();
-      if (err)
-        self._destroy(errnoException(err, 'read'));
+      handle.suspend();
     }
     return;
   }

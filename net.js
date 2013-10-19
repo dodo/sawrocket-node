@@ -27,6 +27,7 @@ var util = require('util');
 var assert = require('assert');
 var rawsocket = require('sawrocket');
 var Buffer = require('buffer').Buffer;
+var SlowBuffer = require('buffer').SlowBuffer;
 var bufferToUint8 = require('uint8').bufferToUint8;
 
 
@@ -493,7 +494,11 @@ function onmessage(ev) {
   var self = handle.owner;
   assert(handle === self._handle, 'handle != self._handle');
 
-  var nread = ev.data.length, buffer = ev.data;
+
+  var nread = ev.data.byteLength;
+  var array = new Uint8Array(ev.data, 0, nread);
+  array.__proto__.__proto__ = Object.create(SlowBuffer.prototype);
+  var buffer = new Buffer(array, array.length, 0);
   debug('onmessage', nread);
 
   if (nread > 0) {

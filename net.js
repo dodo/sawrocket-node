@@ -315,9 +315,7 @@ Object.defineProperty(Socket.prototype, 'readyState', {
 
 Object.defineProperty(Socket.prototype, 'bufferSize', {
   get: function() {
-    if (this._handle) {
-      return this._handle.writeQueueSize + this._writableState.length;
-    }
+    return this._writableState.length;
   }
 });
 
@@ -436,7 +434,6 @@ function onopen() {
   debug('onopen');
   if (self._connecting)
       afterConnect(self, handle);
-  self.emit('error');
 }
 
 // This function is called whenever the handle connection closes

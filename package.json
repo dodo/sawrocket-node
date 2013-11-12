@@ -19,7 +19,7 @@
     "net.js"
   ],
   "dependencies": {
-    "rawsocket": "*",
+    "sawrocket": "*",
     "uint8": "*"
   }
 }

@@ -470,7 +470,7 @@ function onerror(ev) {
   var handle = this;
   var self = handle.owner;
 
-  var err = ev.data;
+  var err = ev || ev.data;
   debug('onerror', err);
 
   self.emit('error', err);

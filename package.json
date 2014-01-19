@@ -18,6 +18,9 @@
     "API",
     "net.js"
   ],
+  "scripts": {
+    "prepublish": "grunt default"
+  },
   "dependencies": {
     "sawrocket": "*",
     "through": "~2.3.4"

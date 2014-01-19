@@ -28,7 +28,6 @@ var assert = require('assert');
 var rawsocket = require('sawrocket');
 var Buffer = require('buffer').Buffer;
 var SlowBuffer = require('buffer').SlowBuffer;
-var bufferToUint8 = require('uint8').bufferToUint8;
 
 
 var errnoException = util._errnoException;
@@ -657,7 +656,7 @@ function sendData(handle, data, encoding) {
     default:
       data = new Buffer(data, encoding);
   }
-  return handle.send(bufferToUint8(data).buffer);
+  return handle.send(data.buffer);
 }
 
 

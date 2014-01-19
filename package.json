@@ -20,6 +20,15 @@
   ],
   "dependencies": {
     "sawrocket": "*",
-    "uint8": "*"
+    "through": "~2.3.4"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "browserify": "~3.19.1",
+    "grunt-browserify": "~1.3.0"
+  },
+  "browser": {
+    "net": "./net.js",
+    "tls": "./tls.js"
   }
 }

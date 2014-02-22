@@ -8,6 +8,8 @@ var util = require('util');
 var EventEmitter = require('events').EventEmitter;
 var crypto = require('./crypto');
 
+function noop() {}
+
 var CLIENT_TO_SERVER = 1;
 var SERVER_TO_CLIENT = 2;
 var debug = util.debuglog ? (function () {
@@ -26,7 +28,7 @@ var debug = util.debuglog ? (function () {
       msg = ('enc' !== contentType ? msg : '(enc) ' + crypto.forge.util.bytesToHex(msg));
       log(direction + msg);
     }
-})() : function () {};
+})() : noop;
 
 
 
@@ -173,6 +175,11 @@ TLSSocket.prototype.getCipher = function(bytes) {
   debug(bytes, CLIENT_TO_SERVER);
   return this.ssl.prepare(bytes);
 };
+
+TLSSocket.prototype._start = noop;
+TLSSocket.prototype._releaseControl = noop;
+TLSSocket.prototype.setSession = noop;
+TLSSocket.prototype.setServername = noop;
 
 function onConnected(conn) {
   debug('Handshake successful');

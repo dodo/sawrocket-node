@@ -758,6 +758,10 @@ Socket.prototype.connect = function(options, cb) {
 
 Socket.prototype.ref = noop;
 Socket.prototype.unref = noop;
+Socket.prototype._start = noop;
+Socket.prototype._releaseControl = noop;
+Socket.prototype.setSession = noop;
+Socket.prototype.setServername = noop;
 
 
 function afterConnect(self, handle) {

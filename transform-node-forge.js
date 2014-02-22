@@ -8,7 +8,6 @@ module.exports = function (file) {
     process.env.BROWSERIFY_SKIP_NODE_FORGE_TRANSFORM = true;
     var relpath = path.relative(process.cwd(), __dirname);
     var data = '';
-    console.log("patch", file,  relpath, __dirname)
     viralify.sync(__dirname, 'node-forge', 'deamdify', 'infront');
     return through();
 }

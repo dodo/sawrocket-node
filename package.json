@@ -1,6 +1,6 @@
 {
   "name": "sawrocket-node",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "net.js using Raw Socket API",
   "author": "https://github.com/dodo",
   "readmeFilename": "README.md",

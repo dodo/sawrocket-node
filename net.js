@@ -483,13 +483,12 @@ function onerror(ev) {
 
 // This function is called whenever it is possible to write to handle again
 function ondrain() {
-  var handle = this;
-  var self = handle.owner;
+  var self = this.owner;
 
   debug('ondrain');
 
   if (self._afterWrites)
-    afterWrite(self, handle);
+    afterWrite(self);
 }
 
 // This function is called whenever the handle gets a
@@ -645,8 +644,8 @@ Socket.prototype._write = function(data, encoding, cb) {
   if (sendData(this._handle, data, enc)) {
     cb();
   } else {
-    this._handle._afterWrites = this._handle._afterWrites || [];
-    this._handle._afterWrites.push(cb);
+    this._afterWrites = this._afterWrites || [];
+    this._afterWrites.push(cb);
   }
 };
 
@@ -690,7 +689,7 @@ Socket.prototype.__defineGetter__('bytesWritten', function() {
 });
 
 
-function afterWrite(self, handle) {
+function afterWrite(self) {
   debug('afterWrite');
 
   // callback may come after call to destroy.

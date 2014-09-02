@@ -373,6 +373,10 @@ Socket.prototype.destroySoon = function() {
 Socket.prototype._destroy = function(exception, cb) {
   debug('destroy');
 
+  if (this._destroying)
+    return;
+  this._destroying = true;
+
   var self = this;
 
   function fireErrorCallbacks() {
@@ -407,6 +411,7 @@ Socket.prototype._destroy = function(exception, cb) {
 
   fireErrorCallbacks();
   this.destroyed = true;
+  this._destroying = false;
 
   if (this.server) {
     debug('has server');
@@ -446,12 +451,13 @@ function onclose() {
   handle.onclose = noop;
   handle.onhalfclose = noop;
 
-  if (!self._shutdown)
-    self.destroy();
-  self.emit('close', self._isException);
-  if (self._shutdown)
-    afterShutdown(self, handle);
-
+  if (!this._destroying) {
+    if (!self._shutdown)
+      self.destroy();
+    self.emit('close', self._isException);
+    if (self._shutdown)
+      afterShutdown(self, handle);
+  }
 }
 
 // This function is called whenever the handle connection half closes

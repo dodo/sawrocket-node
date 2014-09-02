@@ -133,7 +133,9 @@ TLSSocket.prototype.isConnected = function() {
    * Destroys this socket.
    */
 TLSSocket.prototype.destroy = function() {
-  this._socket.destroy();
+  var socket = this._socket;
+  this._socket = null;
+  if (socket) socket.destroy();
 };
 
   /**
@@ -210,8 +212,10 @@ function onDataReady(conn) {
 }
 
 function onClosed() {
+  debug('closed');
   this.writable = false;
   this.authorized = false;
+  this.destroy();
 }
 
 function onError(conn, e) {

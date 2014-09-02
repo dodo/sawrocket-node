@@ -174,7 +174,7 @@ TLSSocket.prototype.write = function(bytes) {
 
 
 TLSSocket.prototype.getCipher = function(bytes) {
-  debug(bytes, CLIENT_TO_SERVER);
+  debug(bytes, CLIENT_TO_SERVER, 'cipher');
   return this.ssl.prepare(bytes);
 };
 

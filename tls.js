@@ -117,7 +117,7 @@ TLSSocket.prototype._init = function(ctx) {
 };
 
 TLSSocket.prototype.serializeStanza = function (el, cb) {
-    return cb(el.toString());
+    return cb(crypto.forge.util.encodeUtf8(el.toString()));
 };
 
  /**

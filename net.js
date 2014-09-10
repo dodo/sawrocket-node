@@ -286,12 +286,8 @@ Socket.prototype.setKeepAlive = function(setting, msecs) {
 
 
 Socket.prototype.address = function() {
-  if (this._handle && this._handle.getsockname) {
-    var out = {};
-    var err = this._handle.getsockname(out);
-    // TODO(bnoordhuis) Check err and throw?
-    return out;
-  }
+  if (this._handle)
+    return this._getsockname(out);
   return null;
 };
 

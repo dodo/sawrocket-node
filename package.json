@@ -35,6 +35,7 @@
     "grunt-browserify": "~1.3.0"
   },
   "browser": {
+    "dgram": "./dgram.js",
     "net": "./net.js",
     "tls": "./tls.js"
   },

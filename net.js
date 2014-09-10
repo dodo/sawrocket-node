@@ -584,13 +584,10 @@ Socket.prototype._getsockname = function() {
   if (!this._handle) {
     return {};
   }
-  if (!this._sockname) {
-    this._sockname = {
-      address:this._handle.localAddress,
-      port:   this._handle.localPort,
-    };
-  }
-  return this._sockname;
+  return {
+    address:this._handle.localAddress,
+    port:   this._handle.localPort,
+  };
 };
 
 

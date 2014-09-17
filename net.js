@@ -586,11 +586,6 @@ Socket.prototype._getsockname = function() {
   };
 };
 
-
-Socket.prototype.serializeStanza = function (el, cb) {
-    return cb(el.toString());
-};
-
 Socket.prototype.__defineGetter__('localAddress', function() {
   return this._getsockname().address;
 });

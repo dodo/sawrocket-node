@@ -116,10 +116,6 @@ TLSSocket.prototype._init = function(ctx) {
   this.ssl.handshake(ctx.session.id);
 };
 
-TLSSocket.prototype.serializeStanza = function (el, cb) {
-    return cb(crypto.forge.util.encodeUtf8(el.toString()));
-};
-
  /**
   * Determines if the socket is connected or not.
   *

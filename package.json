@@ -25,7 +25,7 @@
     "deamdify": "git+https://github.com/dodo/deamdify.git#more-amd-support",
     "viralify": "~0.4.2",
     "node-forge": "~0.2.22",
-    "sawrocket": "*",
+    "sawrocket": "~0.2.0",
     "through": "~2.3.4"
   },
   "devDependencies": {

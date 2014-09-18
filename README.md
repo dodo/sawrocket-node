@@ -8,6 +8,7 @@ Nodejs [net](http://nodejs.org/api/net.html), [tls](http://nodejs.org/api/tls.ht
  * no Server in net and tls
  * [dns](https://github.com/tjfontaine/node-dns) can be used, but needs some [files](https://github.com/dodo/sawrocket-xmpp/blob/master/initrd.js) from [fs](https://github.com/juliangruber/level-fs-browser).
  * crypto is overloaded with the [forge module](https://github.com/digitalbazaar/forge) and adds missing `crypto.createCredentials` to the browser.
+ * not tested in firefox
 
 
 Browserify might help to build your node code for chrome/firefox extension:
